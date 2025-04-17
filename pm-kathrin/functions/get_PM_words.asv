@@ -1,0 +1,11 @@
+
+function [string] = get_PM_words(expinfo, text,x,y,color,when,Marker,flip,angle)
+
+Screen(expinfo.window,'TextSize',15)
+
+[string] = GetEchoString(expinfo.window, t,x, y, expinfo.Colors.black, expinfo.Colors.bgColor);
+
+Screen(expinfo.window,'TextSize',40)
+
+end
+

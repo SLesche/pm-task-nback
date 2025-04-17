@@ -1,0 +1,95 @@
+% This function waits for a response and saves the
+function Trial = getresponse(expinfo, Trial, expTrial, start)
+% Start iternal MATLAB stop-clock
+tic
+
+% If timestamp for onset latency is not provided read out current system
+% time. Attention this is just a work around and leads to biased reaction
+% times
+if ~exist('start','var')
+    start = GetSecs;
+end
+
+% Initialise the response variables
+response = 0;
+Trial(expTrial).ACC = -9;
+Trial(expTrial).RT = -9;
+if Trial(expTrial).PMtask == 0
+    Trial(expTrial).ACC_pm = NaN;
+else
+    Trial(expTrial).ACC_pm = -9;
+end
+
+% clear Buffer of Keyboard
+while toc < 0.1; KbCheck;  end
+
+% read out keyboard until valid key is pressed or maximal allowed response
+% time is reached
+ScreenCleared = 0;
+while toc < expinfo.MaxRT
+    % clear screen once after 0.250 ms
+    if expinfo.LongRT == 1
+        if toc >= Trial(expTrial).StimDuration && ScreenCleared == 0
+            clearScreen(expinfo);
+            ScreenCleared = 1;
+        end
+    end
+
+    % Read keyboard
+    [keyIsDown,timeSecs,keyCode] = KbCheck;
+
+    if keyIsDown
+        % get pressed Key
+        pressedKey = KbName(keyCode);
+
+        % Abbruch des Experiments
+        if  strcmp(pressedKey,expinfo.AbortKey)
+            closeexp(expinfo.window);
+        end
+
+        % Testen ob die Taste zu den erlaubten Antwort-Tasten gehrt
+        if ~any(strcmp(pressedKey,expinfo.RespKeys))
+            response = -9;
+            break; % Dann soll die Loop abgebrochen werden
+        else
+            if any(strcmp(pressedKey,expinfo.RespKeys)) 
+                response = 1;
+                break; % Dann soll die Loop abgebrochen werden
+            end
+
+        end
+    else
+        response = 0;
+    end
+end
+
+Trial(expTrial).response = response;
+Trial(expTrial).keyPressed = timeSecs;
+if Trial(expTrial).response == 1 % Wenn eine erlaubte Taste gedrckt wurde
+    Trial(expTrial).pressedKey = pressedKey;
+    Trial(expTrial).RT = timeSecs - start; % Berechnung der Reaktionszeit
+    % Test wether the correct response was given
+    if strcmp(Trial(expTrial).pressedKey,Trial(expTrial).CorResp)
+        Trial(expTrial).ACC = 1;
+        if Trial(expTrial).PMtask == 1
+            Trial(expTrial).ACC_pm = 1;
+        end
+    else
+        Trial(expTrial).ACC = 0;
+        if Trial(expTrial).PMtask == 1
+            Trial(expTrial).ACC_pm = 0;
+        end
+    end
+
+elseif  Trial(expTrial).response == 0  % Wenn keine erlaubte Antwort gegeben wurde -> Miss
+    Trial(expTrial).RT = expinfo.MaxRT;
+    Trial(expTrial).ACC = -2;
+else % Wenn keine erlaubte Taste gegeben wurde
+    Trial(expTrial).RT = timeSecs - start;
+    Trial(expTrial).ACC = -3;
+end
+
+while KbCheck; end % clear buffer
+FlushEvents('keyDown');
+
+%% End of Function
