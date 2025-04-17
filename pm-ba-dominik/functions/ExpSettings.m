@@ -78,13 +78,13 @@ expinfo.RespKeys = {'F1' 'l' 'd'};
 %% Defining trials to be conducted
 % Specify how many trials should be conducted
 expinfo.nTrials = 168;
-expinfo.nPracTrials = 10;
+expinfo.nPracTrials = 20;
 expinfo.blocknum = 8;
-expinfo.prac_blocknum = 2;
-expinfo.prac_ntarget = 2;
-expinfo.prac_nfeedback = 10;
+expinfo.prac_blocknum = 1;
+expinfo.prac_ntarget = 1;
+expinfo.prac_nfeedback = 20;
 
-expinfo.blockend = linspace(expinfo.nTrials/expin.blocknum, expinfo.nTrials, expinfo.blocknum); % [21:21:168];
+expinfo.blockend = linspace(expinfo.nTrials/expinfo.blocknum, expinfo.nTrials, expinfo.blocknum); % [21:21:168];
 expinfo.PMback = 5; 
 expinfo.nback = 2; 
 expinfo.match_per_block = 4;

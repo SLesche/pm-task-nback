@@ -44,19 +44,17 @@ expinfo = startPTB(expinfo);
 expinfo = ExpSettings(expinfo);
 
 % Set priority for PTB processes to ensure best possible timing
-topPriorityLevel = MaxPriority(expinfo.window);
-Priority(topPriorityLevel);
+%topPriorityLevel = MaxPriority(expinfo.window);
+%Priority(topPriorityLevel);
 
 if expinfo.showPractice ==1
-        
+       
     isPractice =1;
     
     %% General Instructions
     % This is a loop running through the general instruction slides allowing to
     % move back and forth within these slides. As soon as the last slide is
     % finished you cannot move back.
-    if expinfo.session==1
-
     InstSlide = 1; % Start with the first slide
     
     while InstSlide <= expinfo.InstStop_Nback % Loop until last slide of general instruction
@@ -90,13 +88,6 @@ if expinfo.showPractice ==1
     clearScreen(expinfo);
     WaitSecs(0.1);
 
-    else
-        Prac_2_Start=[expinfo.InstFolder_Nback 'Prac_1_2.jpg'];
-        ima=imread(Prac_2_Start);
-        dImageWait(expinfo,ima);
-    end
-
-
     TextCenteredOnPos(expinfo,'3',expinfo.centerX,expinfo.centerY,expinfo.Colors.black,[]);
     WaitSecs(1);
     TextCenteredOnPos(expinfo,'2',expinfo.centerX,expinfo.centerY,expinfo.Colors.black,[]);
@@ -106,7 +97,7 @@ if expinfo.showPractice ==1
     TextCenteredOnPos(expinfo,'+',expinfo.centerX,expinfo.centerY,expinfo.Colors.black,[]);
     WaitSecs(1);
     
-    PracTrials = MakeTrial(expinfo,  isPractice);
+    PracTrials = MakeTrial(expinfo,  isPractice, 'practice');
     for practriali = 1: expinfo.prac_nfeedback % Loop through the practice trials
         PracTrials = DisplayTrial(expinfo,  PracTrials, practriali, isPractice);
     end
@@ -119,8 +110,8 @@ for condition = expinfo.conditions
     %% trails without feedback
     isPractice =2;
 
-    Base_Start_1=[expinfo.InstFolder_Nback 'Base_1.jpg'];
-    ima=imread(Base_Start_1);
+    InstImage=[expinfo.InstFolder_Nback condition, '.jpg'];
+    ima=imread(InstImage);
     dImageWait(expinfo,ima);
 
     TextCenteredOnPos(expinfo,'3',expinfo.centerX,expinfo.centerY,expinfo.Colors.black,[]);
@@ -139,35 +130,59 @@ for condition = expinfo.conditions
     % BackUp_BaseTrial = [expinfo.DataFolder,'Backup\',expinfo.taskName,'_Base_S_',num2str(expinfo.subject), '_Ses_',num2str(expinfo.session)];
     % save(BackUp_BaseTrial,'BackUp_BaseTrial');
 
-        %% Introduce PM task
+    %% Introduce PM task
 
-        InstSlide = 1; % Start with the first slide
-        while InstSlide <= expinfo.InstStop_PM % Loop until last slide of general instruction
-            % Paste the FileName for the Instrcution Slide depending on the current
-            % slide to be displayed
-            Instruction=[expinfo.InstFolder_PM 'PM_' num2str(InstSlide) expinfo.InstExtension];
-            ima=imread(Instruction); % Read in the File
+    % InstSlide = 1; % Start with the first slide
+    % while InstSlide <= expinfo.InstStop_PM % Loop until last slide of general instruction
+    %     % Paste the FileName for the Instrcution Slide depending on the current
+    %     % slide to be displayed
+    %     Instruction=[expinfo.InstFolder_PM 'PM_' num2str(InstSlide) expinfo.InstExtension];
+    %     ima=imread(Instruction); % Read in the File
 
-            % Put the File on the PTB window
-            InstScreen = Screen('MakeTexture',expinfo.window,ima);
-            Screen('DrawTexture', expinfo.window, InstScreen); % draw the scene
-            Screen('Flip', expinfo.window);
-            WaitSecs(0.3);
+    %     % Put the File on the PTB window
+    %     InstScreen = Screen('MakeTexture',expinfo.window,ima);
+    %     Screen('DrawTexture', expinfo.window, InstScreen); % draw the scene
+    %     Screen('Flip', expinfo.window);
+    %     WaitSecs(0.3);
 
-            % Wait for a key press of the right or left key to navigate back an
-            % forth within the instructions
-            if InstSlide == 1
-                [ForwardBackward] = BackOrNext(expinfo,1);
-            else
-                [ForwardBackward] = BackOrNext(expinfo,2);
-            end
-            InstSlide = InstSlide + ForwardBackward;
-        end
-        WaitSecs(2)
-        %
-        % Priority(0); % Reset priority to low level
-        % closeexp(expinfo.window); % Close the experiment
+    %     % Wait for a key press of the right or left key to navigate back an
+    %     % forth within the instructions
+    %     if InstSlide == 1
+    %         [ForwardBackward] = BackOrNext(expinfo,1);
+    %     else
+    %         [ForwardBackward] = BackOrNext(expinfo,2);
+    %     end
+    %     InstSlide = InstSlide + ForwardBackward;
+    % end
+    % WaitSecs(2)
+        
+
+    ExpTrials = MakeTrial(expinfo, isPractice, condition);
+
+    for expTrial = 1 : length(ExpTrials) % Loop durch alle Experimental-Trials
+        ExpTrials = DisplayTrial(expinfo, ExpTrials, expTrial, isPractice);
+    end
+
+    %save all information: i.e. the trial objects, and the expinfo structure.
+    % This ensures that all information used within the experiment can be
+    % accsessed later
+    BackUp_Trial     = [expinfo.DataFolder,'Backup\',expinfo.taskName,'_Exp_Trials_S',num2str(expinfo.subject), '_Condition_', condition];
+    save(BackUp_Trial,'ExpTrials');
+    BackUp_ExpInfo   = [expinfo.DataFolder,'Backup\',expinfo.taskName,'_Exp_ExpInfo_S',num2str(expinfo.subject), '_Condition_', condition];
+    save(BackUp_ExpInfo,'expinfo');
+
+
 end
+%% End Experiment
+% Display one final slide telling the participant that the experiment is
+% finished.
+
+ExpEnd=[expinfo.InstFolder 'ExpEnd.jpg'];
+ima=imread(ExpEnd);
+dImageWait(expinfo,ima);
+
+Priority(0); % Reset priority to low level
+closeexp(expinfo.window); % Close the experiment
 
 %% End of Script
 

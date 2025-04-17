@@ -3,7 +3,7 @@
 % configurations in the expinfo. Alternatively, we can specify the Trial
 % configurations here if there is more complex things to do...
 
-function [Trial] = MakeTrial(expinfo, isPractice)
+function [Trial] = MakeTrial(expinfo, isPractice, current_condition)
 %% specify Trial configurations
 
 % clear all
@@ -94,9 +94,10 @@ while test ==0
         Positions= Positions(~ismember(Positions, [PM PM+expinfo.nback]));
         matchPositions = randsample(Positions, nMatches);  % Randomly pick positions for the ones
     else
-        matchPositions_1 = randsample((expinfo.nback+1):expinfo.prac_nfeedback, expinfo.prac_ntarget);  % Randomly pick positions for the ones
-        matchPositions_2 = randsample(expinfo.prac_nfeedback+1:nTrials, nMatches-expinfo.prac_ntarget);  % Randomly pick positions for the ones
-        matchPositions =[matchPositions_1 matchPositions_2];
+        matchPositions = randsample((expinfo.nback+1):expinfo.prac_nfeedback, expinfo.prac_ntarget);  % Randomly pick positions for the ones
+        
+        %matchPositions_2 = randsample(expinfo.prac_nfeedback+1:nTrials, nMatches-expinfo.prac_ntarget);  % Randomly pick positions for the ones
+        %matchPositions =[matchPositions_1 matchPositions_2];
     end
 
     matchPositions_sorted = sort(matchPositions);
@@ -184,12 +185,9 @@ for trial = 1: nTrials
         Trial(trial).TaskDescription = 'PM_Nback_exp';
     end
     Trial(trial).Subject = expinfo.subject;
-   Trial(trial).Session= expinfo.session;
-    if expinfo.cond == 1
-        Trial(trial).PMcondition = 'focal';
-    else
-        Trial(trial).PMcondition = 'nonfocal';
-    end
+    Trial(trial).Session= expinfo.session;
+    
+    Trial(trial).PMcondition = current_condition;
     Trial(trial).ISI = 0.5;
     Trial(trial).StimDuration =1 ;
 end
