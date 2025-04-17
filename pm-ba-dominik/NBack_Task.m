@@ -110,7 +110,7 @@ for condition = expinfo.conditions
     %% trails without feedback
     isPractice =2;
 
-    InstImage=[expinfo.InstFolder_Nback condition, '.jpg'];
+    InstImage=[expinfo.InstFolder_Nback 'Base_1.jpg'];
     ima=imread(InstImage);
     dImageWait(expinfo,ima);
 
