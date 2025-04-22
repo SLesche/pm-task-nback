@@ -143,10 +143,10 @@ for trial = 1: nTrials
                 Trial(trial).Stim = word_stim; % Assign the word to the trial
 
                 if trial <= expinfo.nback
-                    Words{rowIdx} = []; % Remove the word from the list to avoid repetition
+                    Words(rowIdx) = []; % Remove the word from the list to avoid repetition
                     found_word = true; % Exit loop if condition is met
                 elseif ~strcmp(word_stim, Trial(trial-expinfo.nback).Stim) & ~strcmp(word_stim, Trial(trial-1).Stim)% Check if the word is not the same as the one in nback
-                    Words{rowIdx} = []; % Remove the word from the list to avoid repetition
+                    Words(rowIdx) = []; % Remove the word from the list to avoid repetition
                     found_word = true; % Exit loop if condition is met
                 end
             end    
@@ -161,10 +161,10 @@ for trial = 1: nTrials
             Trial(trial).Stim = word_stim; % Assign the word to the trial
 
             if trial <= expinfo.nback
-                Words{rowIdx} = []; % Remove the word from the list to avoid repetition
+                Words(rowIdx) = []; % Remove the word from the list to avoid repetition
                 found_word = true; % Exit loop if condition is met
             elseif ~strcmp(word_stim, Trial(trial-expinfo.nback).Stim) & ~strcmp(word_stim, Trial(trial-1).Stim)% Check if the word is not the same as the one in nback
-                Words{rowIdx} = []; % Remove the word from the list to avoid repetition
+                Words(rowIdx) = []; % Remove the word from the list to avoid repetition
                 found_word = true; % Exit loop if condition is met
             end
         end          

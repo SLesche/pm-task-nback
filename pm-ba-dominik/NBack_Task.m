@@ -106,13 +106,28 @@ if expinfo.showPractice ==1
     save(BackUp_PracTrial,'PracTrials');
 end
 
-for condition = expinfo.conditions
+% Display "Geschafft" picture
+InstImage=[expinfo.InstFolder_Nback 'Base_1.jpg'];
+ima=imread(InstImage);
+dImageWait(expinfo,ima);
 
-    %disp(["current condition", condition])
+WaitSecs(2);
+for condition = expinfo.conditions
+    disp(["current condition", condition])
     %% trails without feedback
     isPractice =0;
 
-    InstImage=[expinfo.InstFolder_Nback 'Base_1.jpg'];
+    if condition == "baseline"
+       instruction_picture = 'inst_baseline.jpg';
+    elseif condition == "focal"
+       instruction_picture = 'inst_focal.jpg';
+    elseif condition == "nonfocal"
+        instruction_picture = 'inst_nonfocal.jpg';
+    end
+
+    disp(instruction_picture)
+
+    InstImage=[expinfo.InstFolder_Nback instruction_picture];
     ima=imread(InstImage);
     dImageWait(expinfo,ima);
 
@@ -172,8 +187,6 @@ for condition = expinfo.conditions
     save(BackUp_Trial,'ExpTrials');
     BackUp_ExpInfo   = [expinfo.DataFolder,'Backup\',expinfo.taskName,'_Exp_ExpInfo_S',num2str(expinfo.subject), '_Condition_', condition];
     save(BackUp_ExpInfo,'expinfo');
-
-
 end
 %% End Experiment
 % Display one final slide telling the participant that the experiment is
