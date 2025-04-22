@@ -42,6 +42,11 @@ while toc < expinfo.MaxRT
         % get pressed Key
         pressedKey = KbName(keyCode);
 
+        % If multiple keys are pressed, take only the first one
+        if iscell(pressedKey)
+            pressedKey = pressedKey{1};
+        end
+
         % Abbruch des Experiments
         if  strcmp(pressedKey,expinfo.AbortKey)
             closeexp(expinfo.window);
