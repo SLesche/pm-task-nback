@@ -111,7 +111,7 @@ InstImage=[expinfo.InstFolder_Nback 'Base_1.jpg'];
 ima=imread(InstImage);
 dImageWait(expinfo,ima);
 
-WaitSecs(2);
+WaitSecs(0.5);
 for condition = expinfo.conditions
     disp(["current condition", condition])
     %% trails without feedback
