@@ -1,4 +1,4 @@
-%N ame of the experiment %%
+1%N ame of the experiment %%
 % It is good practice to give a short desctiption of your experiment
 clear all; % Start the experiment with empty workspace
 clc; % Clear command window
@@ -107,8 +107,10 @@ if expinfo.showPractice ==1
 end
 
 for condition = expinfo.conditions
+
+    %disp(["current condition", condition])
     %% trails without feedback
-    isPractice =2;
+    isPractice =0;
 
     InstImage=[expinfo.InstFolder_Nback 'Base_1.jpg'];
     ima=imread(InstImage);

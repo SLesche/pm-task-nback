@@ -62,8 +62,12 @@ elseif mod(expinfo.subject, 2)==1
     % end
 end
 
+
+expinfo.word_PM_exp_focal             = {'ORDEN' 'LANZE' 'ORDEN' 'LANZE' 'LANZE' 'LANZE' 'ORDEN' 'ORDEN'};
+expinfo.word_PM_exp_nonfocal          = {'KANTE' 'MAUER' 'KOHLE' 'MOTIV' 'MENGE' 'MOTOR' 'KAKTUS' 'KETTE'};
+
 %% Shuffle conditions
-possible_conditions = ['baseline', 'focal', 'nonfocal'];
+possible_conditions = ["baseline", "focal", "nonfocal"];
 expinfo.conditions = possible_conditions(randperm(length(possible_conditions)));
 
 %% Specify Response Keys used in the experiment
@@ -77,14 +81,15 @@ expinfo.RespKeys = {'F1' 'l' 'd'};
 
 %% Defining trials to be conducted
 % Specify how many trials should be conducted
-expinfo.nTrials = 168;
-expinfo.nPracTrials = 20;
+expinfo.trialsPerBlock = 20;
+expinfo.nPracTrials = 5;
 expinfo.blocknum = 8;
+expinfo.nTrials = expinfo.trialsPerBlock * expinfo.blocknum; % 20*8 = 160
 expinfo.prac_blocknum = 1;
 expinfo.prac_ntarget = 1;
-expinfo.prac_nfeedback = 20;
+expinfo.prac_nfeedback = expinfo.nPracTrials;
 
-expinfo.blockend = linspace(expinfo.nTrials/expinfo.blocknum, expinfo.nTrials, expinfo.blocknum); % [21:21:168];
+expinfo.blockend = linspace(expinfo.nTrials/expinfo.blocknum, expinfo.nTrials, expinfo.blocknum); % [20:20:160];
 expinfo.PMback = 5; 
 expinfo.nback = 2; 
 expinfo.match_per_block = 4;

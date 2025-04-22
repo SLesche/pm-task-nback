@@ -65,7 +65,7 @@ if isPractice == 1
     nMatches = expinfo.prac_blocknum * expinfo.match_per_block;
 else
     Wordlist = readtable('Words_long.xlsx','Format','auto');
-    Words = repmat(Wordlist.Words,2,1);
+    Words = repmat(Wordlist.Words,3,1);
     nTrials = expinfo.nTrials;
     nMatches = expinfo.blocknum * expinfo.match_per_block;
 end
@@ -127,11 +127,47 @@ for trial = 1: nTrials
     end
 
     if Trial(trial).Match == 0 && Trial(trial).PMtask == 1 % PM task
-        Trial(trial).Stim = expinfo.word_PM_exp{PMnum(trial)};
+        if strcmp(current_condition, 'focal')
+            Trial(trial).Stim = expinfo.word_PM_exp_focal{PMnum(trial)};
+            %disp(["focal PM task: ", Trial(trial).Stim]);
+        elseif strcmp(current_condition, 'nonfocal')
+            Trial(trial).Stim = expinfo.word_PM_exp_nonfocal{PMnum(trial)};
+            %disp(["Non-focal PM task: ", Trial(trial).Stim]);
+        elseif strcmp(current_condition, 'baseline')
+            found_word = false;
+            while found_word == false
+                rowIdx = randsample(height(Words), 1); % Get a random row index
+                
+                word_stim = Words{rowIdx};
+
+                Trial(trial).Stim = word_stim; % Assign the word to the trial
+
+                if trial <= expinfo.nback
+                    Words{rowIdx} = []; % Remove the word from the list to avoid repetition
+                    found_word = true; % Exit loop if condition is met
+                elseif ~strcmp(word_stim, Trial(trial-expinfo.nback).Stim) & ~strcmp(word_stim, Trial(trial-1).Stim)% Check if the word is not the same as the one in nback
+                    Words{rowIdx} = []; % Remove the word from the list to avoid repetition
+                    found_word = true; % Exit loop if condition is met
+                end
+            end    
+        end
     elseif Trial(trial).Match == 0 && Trial(trial).PMtask == 0 % no PM task and no match
-        rowIdx = randsample(height(Words), 1); % Get a random row index
-        Trial(trial).Stim = Words{rowIdx};
-        Words(rowIdx, :) = []; % Remove the row from the table
+        found_word = false;
+        while found_word == false
+            rowIdx = randsample(height(Words), 1); % Get a random row index
+            
+            word_stim = Words{rowIdx};
+
+            Trial(trial).Stim = word_stim; % Assign the word to the trial
+
+            if trial <= expinfo.nback
+                Words{rowIdx} = []; % Remove the word from the list to avoid repetition
+                found_word = true; % Exit loop if condition is met
+            elseif ~strcmp(word_stim, Trial(trial-expinfo.nback).Stim) & ~strcmp(word_stim, Trial(trial-1).Stim)% Check if the word is not the same as the one in nback
+                Words{rowIdx} = []; % Remove the word from the list to avoid repetition
+                found_word = true; % Exit loop if condition is met
+            end
+        end          
     elseif Trial(trial).Match == 1 && Trial(trial).PMtask == 0 % no PM task and  match
         Trial(trial).Stim = Trial(trial-expinfo.nback).Stim;
     end
