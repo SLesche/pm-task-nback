@@ -1,4 +1,4 @@
-1%N ame of the experiment %%
+%N ame of the experiment %%
 % It is good practice to give a short desctiption of your experiment
 clear all; % Start the experiment with empty workspace
 clc; % Clear command window
@@ -177,15 +177,15 @@ for condition = expinfo.conditions
     ExpTrials = MakeTrial(expinfo, isPractice, condition);
 
     for expTrial = 1 : length(ExpTrials) % Loop durch alle Experimental-Trials
-        ExpTrials = DisplayTrial(expinfo, ExpTrials, expTrial, isPractice);
+        ExpTrials = DisplayTrial(expinfo, ExpTrials, expTrial, isPractice, condition);
     end
 
     %save all information: i.e. the trial objects, and the expinfo structure.
     % This ensures that all information used within the experiment can be
     % accsessed later
-    BackUp_Trial     = [expinfo.DataFolder,'Backup\',expinfo.taskName,'_Exp_Trials_S',num2str(expinfo.subject), '_Condition_', condition];
+    BackUp_Trial     = [expinfo.DataFolder,'Backup\',expinfo.taskName,'_Exp_Trials_S',num2str(expinfo.subject), '_Condition_', convertStringsToChars(condition)];
     save(BackUp_Trial,'ExpTrials');
-    BackUp_ExpInfo   = [expinfo.DataFolder,'Backup\',expinfo.taskName,'_Exp_ExpInfo_S',num2str(expinfo.subject), '_Condition_', condition];
+    BackUp_ExpInfo   = [expinfo.DataFolder,'Backup\',expinfo.taskName,'_Exp_ExpInfo_S',num2str(expinfo.subject), '_Condition_', convertStringsToChars(condition)];
     save(BackUp_ExpInfo,'expinfo');
 end
 %% End Experiment

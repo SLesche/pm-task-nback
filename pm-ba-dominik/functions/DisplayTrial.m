@@ -1,6 +1,10 @@
 % This function displays one trial of a Simon Task
 
-function Trial = DisplayTrial(expinfo, Trial, expTrial, isPractice)
+function Trial = DisplayTrial(expinfo, Trial, expTrial, isPractice, current_condition)
+
+if ~exist('current_condition', 'var')
+    current_condition = "baseline";
+end
 
 %% Trial Procedure
 
@@ -63,13 +67,12 @@ SaveTable = orderfields(Trial);
 Data = struct2table(SaveTable,'AsArray',true);
 
 if isPractice == 1
-    writetable(Data,[expinfo.DataFolder,'Subject_',num2str(expinfo.subject),'_Session_',num2str(expinfo.session),'_Prac.csv']);
+    writetable(Data,[expinfo.DataFolder,'Subject_',num2str(expinfo.subject),'_Session_',num2str(expinfo.session), '_Prac.csv']);
 elseif isPractice == 2
-     writetable(Data,[expinfo.DataFolder,'Subject_',num2str(expinfo.subject),'_Session_',num2str(expinfo.session),'_Base.csv']);
+     writetable(Data,[expinfo.DataFolder,'Subject_',num2str(expinfo.subject),'_Session_',num2str(expinfo.session), '_condition_', convertStringsToChars(current_condition),'_Base.csv']);
 else
-     writetable(Data,[expinfo.DataFolder,'Subject_',num2str(expinfo.subject),'_Session_',num2str(expinfo.session),'_Exp.csv']);
+     writetable(Data,[expinfo.DataFolder,'Subject_',num2str(expinfo.subject),'_Session_',num2str(expinfo.session), '_condition_', convertStringsToChars(current_condition),'_Exp.csv']);
 end
-
 
 end
 

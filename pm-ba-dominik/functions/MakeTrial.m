@@ -75,7 +75,7 @@ end
 Positions = (expinfo.nback+1):nTrials;
 
 % create settings for PM task
-if isPractice ==0
+if isPractice ==0 || strcmp(current_condition, "baseline")  
     PM          = expinfo.blockend- randsample(0:expinfo.PMback,length(expinfo.blockend), true);
     PMtask      = zeros(nTrials, 1);
     PMnum       = zeros(nTrials, 1);
@@ -85,31 +85,39 @@ end
 
 % get positions for matches in Nback task
 % nMatches = round(nTrials / 3)-expinfo.nPM;
-test = false;
+% Initialize Match array
+Match = zeros(nTrials, 1);
 
-while test ==0
-    Match = zeros(nTrials, 1);
+% Define candidate positions (exclude PM and surrounding positions for exp trials)
+validPositions = (expinfo.nback + 1):nTrials;
 
-    if isPractice==0
-        Positions= Positions(~ismember(Positions, [PM PM+expinfo.nback]));
-        matchPositions = randsample(Positions, nMatches);  % Randomly pick positions for the ones
-    else
-        matchPositions = randsample((expinfo.nback+1):expinfo.prac_nfeedback, expinfo.prac_ntarget);  % Randomly pick positions for the ones
-        
-        %matchPositions_2 = randsample(expinfo.prac_nfeedback+1:nTrials, nMatches-expinfo.prac_ntarget);  % Randomly pick positions for the ones
-        %matchPositions =[matchPositions_1 matchPositions_2];
-    end
+if isPractice == 0
+    pmExcluded = [PM, PM + expinfo.nback];  % PM and PM+nback can't be used
+    validPositions = setdiff(validPositions, pmExcluded);
+end
 
-    matchPositions_sorted = sort(matchPositions);
+% Shuffle the valid positions to randomize selection
+validPositions = validPositions(randperm(length(validPositions)));
 
-    % Calculate differences between consecutive match positions
-    diffs_all = abs(matchPositions_sorted' - matchPositions_sorted);
+% Greedily add match positions, ensuring no accidental matches
+chosenMatches = [];
 
-    if ~any(diffs_all==expinfo.nback)
-        Match(matchPositions) = 1;
-        test = true; % Exit loop
+for idx = 1:length(validPositions)
+    candidate = validPositions(idx);
+    if ~Match(candidate)
+        chosenMatches = [chosenMatches, candidate];
+
+        Match(candidate) = 1;
+        if length(chosenMatches) >= nMatches
+            break;
+        end
     end
 end
+
+if length(chosenMatches) < nMatches
+    error('Could not generate sufficient match trials without conflict.');
+end
+
 
 
 % initialize trial strcuture
@@ -118,7 +126,7 @@ for trial = 1: nTrials
     Trial(trial).TrialNum = trial; % trial number
     Trial(trial).Match = Match(trial); % is current trial match
 
-    if isPractice == 1 || isPractice == 2
+    if isPractice == 1 || isPractice == 2 || strcmp(current_condition, "baseline")
         Trial(trial).PMtask =0;
         Trial(trial).PMnum = 0; % is current trial PM task
     else
@@ -193,7 +201,7 @@ for trial = 1: nTrials
         Trial(trial).PM7 = PM(7); % trial number PM
         Trial(trial).PM8 = PM(8); % trial number PM
 
-    elseif isPractice ==1
+    elseif isPractice ==1 || strcmp(current_condition, "baseline")
         Trial(trial).Prac = 1;
 
         if Trial(trial).Match == 1

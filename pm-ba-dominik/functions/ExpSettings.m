@@ -81,7 +81,7 @@ expinfo.RespKeys = {'F1' 'l' 'd'};
 
 %% Defining trials to be conducted
 % Specify how many trials should be conducted
-expinfo.trialsPerBlock = 20;
+expinfo.trialsPerBlock = 20; %20
 expinfo.nPracTrials = 5;
 expinfo.blocknum = 8;
 expinfo.nTrials = expinfo.trialsPerBlock * expinfo.blocknum; % 20*8 = 160
@@ -92,7 +92,7 @@ expinfo.prac_nfeedback = expinfo.nPracTrials;
 expinfo.blockend = linspace(expinfo.nTrials/expinfo.blocknum, expinfo.nTrials, expinfo.blocknum); % [20:20:160];
 expinfo.PMback = 5; 
 expinfo.nback = 2; 
-expinfo.match_per_block = 4;
+expinfo.match_per_block = 6; % 4
 
 %% Colors HSL Farbraum
 expinfo.Colors.green =  [25 255 25];
