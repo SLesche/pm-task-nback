@@ -63,7 +63,7 @@ elseif mod(expinfo.subject, 2)==1
 end
 
 
-expinfo.word_PM_exp_focal             = {'ORDEN' 'LANZE' 'ORDEN' 'LANZE' 'LANZE' 'LANZE' 'ORDEN' 'ORDEN'};
+expinfo.word_PM_exp_focal             = {'PAKET' 'EINBLICK' 'PAKET' 'EINBLICK' 'EINBLICK' 'EINBLICK' 'PAKET' 'PAKET'};
 expinfo.word_PM_exp_nonfocal          = {'KANTE' 'MAUER' 'KOHLE' 'MOTIV' 'MENGE' 'MOTOR' 'KAKTUS' 'KETTE'};
 
 %% Shuffle conditions
@@ -82,7 +82,7 @@ expinfo.RespKeys = {'F1' 'l' 'd'};
 %% Defining trials to be conducted
 % Specify how many trials should be conducted
 expinfo.trialsPerBlock = 20; %20
-expinfo.nPracTrials = 5;
+expinfo.nPracTrials = 20;
 expinfo.blocknum = 8;
 expinfo.nTrials = expinfo.trialsPerBlock * expinfo.blocknum; % 20*8 = 160
 expinfo.prac_blocknum = 1;

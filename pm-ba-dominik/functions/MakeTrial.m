@@ -64,8 +64,10 @@ if isPractice == 1
     nTrials = expinfo.nPracTrials;
     nMatches = expinfo.prac_blocknum * expinfo.match_per_block;
 else
-    Wordlist = readtable('Words_long.xlsx','Format','auto');
-    Words = repmat(Wordlist.Words,3,1);
+    % Get condition num
+    condition_num = find(expinfo.conditions == current_condition);
+    Wordlist = readtable('Wortliste.xlsx','Format','auto');
+    Words = repmat(Wordlist.(['word_list_' num2str(condition_num)]),4,1);
     nTrials = expinfo.nTrials;
     nMatches = expinfo.blocknum * expinfo.match_per_block;
 end
@@ -75,7 +77,7 @@ end
 Positions = (expinfo.nback+1):nTrials;
 
 % create settings for PM task
-if isPractice ==0 || strcmp(current_condition, "baseline")  
+if isPractice ==0 && ~strcmp(current_condition, "baseline")  
     PM          = expinfo.blockend- randsample(0:expinfo.PMback,length(expinfo.blockend), true);
     PMtask      = zeros(nTrials, 1);
     PMnum       = zeros(nTrials, 1);
@@ -91,7 +93,7 @@ Match = zeros(nTrials, 1);
 % Define candidate positions (exclude PM and surrounding positions for exp trials)
 validPositions = (expinfo.nback + 1):nTrials;
 
-if isPractice == 0
+if isPractice == 0 && ~strcmp(current_condition, "baseline")
     pmExcluded = [PM, PM + expinfo.nback];  % PM and PM+nback can't be used
     validPositions = setdiff(validPositions, pmExcluded);
 end
@@ -182,7 +184,7 @@ for trial = 1: nTrials
 
 
     % add correct response
-    if isPractice ==0
+    if isPractice ==0 && ~strcmp(current_condition, "baseline")
         Trial(trial).Prac = 0;
 
         if Trial(trial).Match == 1 && Trial(trial).PMtask ==0

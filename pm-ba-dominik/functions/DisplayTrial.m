@@ -66,12 +66,13 @@ end
 SaveTable = orderfields(Trial);
 Data = struct2table(SaveTable,'AsArray',true);
 
+condition_num = find(expinfo.conditions == current_condition);
 if isPractice == 1
     writetable(Data,[expinfo.DataFolder,'Subject_',num2str(expinfo.subject),'_Session_',num2str(expinfo.session), '_Prac.csv']);
 elseif isPractice == 2
-     writetable(Data,[expinfo.DataFolder,'Subject_',num2str(expinfo.subject),'_Session_',num2str(expinfo.session), '_condition_', convertStringsToChars(current_condition),'_Base.csv']);
+     writetable(Data,[expinfo.DataFolder,'Subject_',num2str(expinfo.subject),'_Session_',num2str(expinfo.session), '_condition', num2str(condition_num),'_', convertStringsToChars(current_condition),'_Base.csv']);
 else
-     writetable(Data,[expinfo.DataFolder,'Subject_',num2str(expinfo.subject),'_Session_',num2str(expinfo.session), '_condition_', convertStringsToChars(current_condition),'_Exp.csv']);
+     writetable(Data,[expinfo.DataFolder,'Subject_',num2str(expinfo.subject),'_Session_',num2str(expinfo.session), '_condition', num2str(condition_num),'_', convertStringsToChars(current_condition),'_Exp.csv']);
 end
 
 end
