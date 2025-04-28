@@ -63,7 +63,7 @@ elseif mod(expinfo.subject, 2)==1
 end
 
 
-expinfo.word_PM_exp_focal             = {'PAKET' 'EINBLICK' 'PAKET' 'EINBLICK' 'EINBLICK' 'EINBLICK' 'PAKET' 'PAKET'};
+expinfo.word_PM_exp_focal             = {'PAKET' 'TAFEL' 'PAKET' 'TAFEL' 'TAFEL' 'TAFEL' 'PAKET' 'PAKET'};
 expinfo.word_PM_exp_nonfocal          = {'KANTE' 'MAUER' 'KOHLE' 'MOTIV' 'MENGE' 'MOTOR' 'KAKTUS' 'KETTE'};
 
 %% Shuffle conditions
