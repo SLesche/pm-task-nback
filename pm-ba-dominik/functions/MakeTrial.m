@@ -56,7 +56,7 @@ function [Trial] = MakeTrial(expinfo, isPractice, current_condition)
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-rng(expinfo.subject  + isPractice + expinfo.session);
+rng(expinfo.subject  + isPractice);
 
 if isPractice == 1
     Wordlist = readtable('Words_long.xlsx','Format','auto');
@@ -231,7 +231,7 @@ for trial = 1: nTrials
         Trial(trial).TaskDescription = 'PM_Nback_exp';
     end
     Trial(trial).Subject = expinfo.subject;
-    Trial(trial).Session= expinfo.session;
+    % Trial(trial).Session= expinfo.session;
     
     Trial(trial).PMcondition = current_condition;
     Trial(trial).ISI = 0.5;

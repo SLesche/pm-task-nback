@@ -28,7 +28,7 @@ while validKey == 0
             end
         elseif strcmp(pressedKey,expinfo.StartKey) % start key press
             % Options = 1 only allow to move foraward
-            if options == 2
+            if options ~= -1
                 validKey = 1;
             end
         elseif strcmp(pressedKey,expinfo.AbortKey) % Abort experiment
@@ -44,7 +44,7 @@ if strcmp(pressedKey,expinfo.LeftKey)
     response = -1;
 elseif strcmp(pressedKey,expinfo.RightKey) && options ~= 2
     response = 1;
-elseif strcmp(pressedKey,expinfo.StartKey) && options == 2
+elseif strcmp(pressedKey,expinfo.StartKey)
     response = 1;
 end
 

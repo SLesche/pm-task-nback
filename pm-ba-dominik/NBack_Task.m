@@ -88,7 +88,7 @@ if expinfo.showPractice ==1
         PracTrials = DisplayTrial(expinfo,  PracTrials, practriali, isPractice);
     end
     
-    BackUp_PracTrial = [expinfo.DataFolder,'Backup\',expinfo.taskName,'_Prac_Trials_S_',num2str(expinfo.subject),num2str(expinfo.session)];
+    BackUp_PracTrial = [expinfo.DataFolder,'Backup\',expinfo.taskName,'_Prac_Trials_S_',num2str(expinfo.subject)];
     save(BackUp_PracTrial,'PracTrials');
 
     displayInstruction(expinfo, expinfo.InstFolder_Nback, 'Practice_Finished', 0); % Display the first slide of the general instructions

@@ -12,6 +12,8 @@ expinfo.DateTime.Format = 'hh:mm:ss';
 expinfo.Time = cellstr(expinfo.DateTime);
 expinfo.Time = expinfo.Time{1};
 
+expinfo.session = 1;
+
 %% Specify Stimulus and Text properties 
 expinfo.stimulussize = 40; % in Pixel 
 
@@ -83,16 +85,16 @@ expinfo.RespKeys = {'F1' 'l' 'd'};
 % Specify how many trials should be conducted
 expinfo.trialsPerBlock = 20; %20
 expinfo.nPracTrials = 20; % 20
-expinfo.blocknum = 2;
+expinfo.blocknum = 8;
 expinfo.nTrials = expinfo.trialsPerBlock * expinfo.blocknum; % 20*8 = 160
 expinfo.prac_blocknum = 1;
 expinfo.prac_ntarget = 1;
 expinfo.prac_nfeedback = expinfo.nPracTrials;
 
 expinfo.blockend = linspace(expinfo.nTrials/expinfo.blocknum, expinfo.nTrials, expinfo.blocknum); % [20:20:160];
-expinfo.PMback = 5; 
+expinfo.PMback = 5; % 5
 expinfo.nback = 2; 
-expinfo.match_per_block = 6; % 4
+expinfo.match_per_block = 6; % 6
 
 %% Colors HSL Farbraum
 expinfo.Colors.green =  [25 255 25];
