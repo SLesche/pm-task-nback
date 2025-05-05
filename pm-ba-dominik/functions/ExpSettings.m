@@ -82,8 +82,8 @@ expinfo.RespKeys = {'F1' 'l' 'd'};
 %% Defining trials to be conducted
 % Specify how many trials should be conducted
 expinfo.trialsPerBlock = 20; %20
-expinfo.nPracTrials = 20;
-expinfo.blocknum = 8;
+expinfo.nPracTrials = 20; % 20
+expinfo.blocknum = 2;
 expinfo.nTrials = expinfo.trialsPerBlock * expinfo.blocknum; % 20*8 = 160
 expinfo.prac_blocknum = 1;
 expinfo.prac_ntarget = 1;
