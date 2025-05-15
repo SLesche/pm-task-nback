@@ -66,11 +66,12 @@ end
 
 
 expinfo.word_PM_exp_focal             = {'PAKET' 'TAFEL' 'PAKET' 'TAFEL' 'TAFEL' 'TAFEL' 'PAKET' 'PAKET'};
-expinfo.word_PM_exp_nonfocal          = {'KANTE' 'MAUER' 'KOHLE' 'MOTIV' 'MENGE' 'MOTOR' 'KAKTUS' 'KETTE'};
+expinfo.word_PM_exp_nonfocal          = {'KASTEN' 'MODUL' 'KUPFER' 'MIENE' 'MORAL' 'KANTE' 'KISSEN' 'MASKE'};
 
 %% Shuffle conditions
-possible_conditions = ["baseline", "focal", "nonfocal"];
-expinfo.conditions = possible_conditions(randperm(length(possible_conditions)));
+% possible_conditions = ["baseline", "focal", "nonfocal"];
+% expinfo.conditions = possible_conditions(randperm(length(possible_conditions)));
+expinfo.conditions  = ["baseline", "focal", "nonfocal"];
 
 %% Specify Response Keys used in the experiment
 expinfo.RightKey = 'RightArrow';
@@ -79,7 +80,6 @@ expinfo.StartKey='space';
 expinfo.AbortKey = 'F12';
 expinfo.PMKey = 'F1';
 expinfo.RespKeys = {'F1' 'l' 'd'};
-
 
 %% Defining trials to be conducted
 % Specify how many trials should be conducted

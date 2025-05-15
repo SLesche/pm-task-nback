@@ -1,15 +1,19 @@
-function [last_response] = displayInstruction(expinfo, folder_path, file_pattern, allow_repeat)
-    % displayInstruction: Displays files matching the regex pattern in the
-    % folder_path in order of the number at the end. If no number is found, there
-    % should only be one matching file.
+function [last_response] = displayInstruction(expinfo, folder_path, file_pattern, allow_repeat, min_display_time)
+    % displayInstruction: Displays files matching a regex pattern in order,
+    % allowing navigation with optional repeat, and enforcing a global time lock.
     %
     % Parameters:
-    %   expinfo: Struct containing experiment info (e.g., PTB window, keys).
-    %   folder_path: Path to the folder containing instruction files.
-    %   file_pattern: Regular expression pattern to match file names.
+    %   expinfo: Struct with experiment display info (e.g., PTB window, keys).
+    %   folder_path: Folder with instruction image files.
+    %   file_pattern: Regex pattern to match relevant files.
+    %   allow_repeat: (Optional) Allow backward navigation (default = 0).
+    %   min_display_time: (Optional) Total minimum display time before exit (default = 0 sec).
 
     if ~exist('allow_repeat', 'var')
         allow_repeat = 0;
+    end
+    if ~exist('min_display_time', 'var')
+        min_display_time = 0;
     end
 
     % List files matching the pattern
@@ -39,47 +43,54 @@ function [last_response] = displayInstruction(expinfo, folder_path, file_pattern
             disp(file_pattern)
             error('Multiple files match the pattern but do not contain numbers. Ensure only one file matches.');
         end
-        sorted_files = matched_files; % Single file without a number
+        sorted_files = matched_files;
     else
-        % Sort files based on the extracted numbers (ignoring NaN)
         [~, sort_idx] = sort(file_numbers, 'ascend', 'ComparisonMethod', 'real');
         sorted_files = matched_files(sort_idx);
     end
 
-    % Display matched files in order
+    % Begin global timer
+    total_start_time = GetSecs();
     current_index = 1;
     num_files = length(sorted_files);
 
     while current_index <= num_files
-        % Read and display the current file
+        % Display current instruction screen
         ima = imread(sorted_files{current_index});
         InstScreen = Screen('MakeTexture', expinfo.window, ima);
         Screen('DrawTexture', expinfo.window, InstScreen);
         Screen('Flip', expinfo.window);
-
         WaitSecs(0.2);
 
-        % Determine navigation options based on position
+        % Determine navigation options
         if allow_repeat
-            response = BackOrNext(expinfo, 9); % Allow repeat key
+            response = BackOrNext(expinfo, 9);  % Allow repeat key
         else
             if current_index == 1
-                response = BackOrNext(expinfo, 1); % Only allow forward
+                response = BackOrNext(expinfo, 1);  % Only forward
             else
-                response = BackOrNext(expinfo, 0); % Allow both forward and backward
+                response = BackOrNext(expinfo, 0);  % Forward and backward
             end
         end
 
-        % Update current index based on response
-        current_index = current_index + response;
+        % If at the last instruction and trying to move forward,
+        % block until the global min_display_time is reached
+        if current_index == num_files && response > 0
+            elapsed = GetSecs() - total_start_time;
+            remaining_time = min_display_time - elapsed;
+            if remaining_time > 0
+                WaitSecs(remaining_time);
+            end
+        end
 
+        % Update index
+        current_index = current_index + response;
     end
+
     last_response = response;
 
-    % Clear screen at the end
+    % Clear screen
     clearScreen(expinfo);
-    
     WaitSecs(0.1);
-    
     Screen('TextSize', expinfo.window, 30);
 end

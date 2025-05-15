@@ -90,8 +90,6 @@ if expinfo.showPractice ==1
     
     BackUp_PracTrial = [expinfo.DataFolder,'Backup\',expinfo.taskName,'_Prac_Trials_S_',num2str(expinfo.subject)];
     save(BackUp_PracTrial,'PracTrials');
-
-    displayInstruction(expinfo, expinfo.InstFolder_Nback, 'Practice_Finished', 0); % Display the first slide of the general instructions
 end
 
 for condition = expinfo.conditions
@@ -100,14 +98,12 @@ for condition = expinfo.conditions
     isPractice =0;
 
     if condition == "baseline"
-       instruction_picture = 'Introduction_Block_A';
+       instruction_picture = 'Practice_Finished';
     elseif condition == "focal"
        instruction_picture = 'Explanation_focal';
     elseif condition == "nonfocal"
         instruction_picture = 'Explanation_nonfocal';
     end
-
-    disp(instruction_picture)
 
     displayInstruction(expinfo, expinfo.InstFolder_Nback, instruction_picture, 0); % Display the first slide of the general instructions
 
@@ -168,7 +164,15 @@ for condition = expinfo.conditions
     BackUp_ExpInfo   = [expinfo.DataFolder,'Backup\',expinfo.taskName,'_Exp_ExpInfo_S',num2str(expinfo.subject), '_Condition_', convertStringsToChars(condition)];
     save(BackUp_ExpInfo,'expinfo');
 
-    displayInstruction(expinfo, expinfo.InstFolder_Nback, 'Block_Finished', 0); % Display the first slide of the general instructions
+    if condition == "baseline"
+        instruction_picture = 'First_Block_Finished';
+    elseif condition == "focal"
+        instruction_picture = 'Second_Block_Finished';
+    end
+
+    if condition ~= "nonfocal"
+        displayInstruction(expinfo, expinfo.InstFolder_Nback, instruction_picture, 0, 60); % Display the first slide of the general instructions
+    end
 end
 %% End Experiment
 % Display one final slide telling the participant that the experiment is
